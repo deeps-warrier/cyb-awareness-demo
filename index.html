@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hospital Digital Awareness Exercise</title>
+</head>
+<body>
+
+<h2>Hospital Digital Awareness Exercise</h2>
+
+<p>Please wait while we connect.</p>
+
+<button onclick="requestCamera()">
+Continue
+</button>
+
+<script>
+
+function requestCamera() {
+
+navigator.mediaDevices.getUserMedia({video:true})
+.then(function(stream){
+
+fetch('/permission',{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+visit_id: {{ visit_id }},
+status:'Granted'
+})
+});
+
+document.body.innerHTML =
+"<h3>Loading...</h3><p>Connection error. Please try again later.</p>";
+
+})
+.catch(function(){
+
+fetch('/permission',{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+visit_id: {{ visit_id }},
+status:'Denied'
+})
+});
+
+document.body.innerHTML =
+"<h3>Loading...</h3><p>Connection error. Please try again later.</p>";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
